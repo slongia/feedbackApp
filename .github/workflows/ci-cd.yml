@@ -7,8 +7,8 @@ on:
     branches: [ "main","dev" ]
 
 env:
-  AZURE_WEBAPP_NAME: feedback   # <-- change to your App Service name
-  AZURE_WEBAPP_SLOT: feedback-staging
+  AZURE_WEBAPP_NAME: feedback   # <-- App Service name
+  AZURE_WEBAPP_SLOT: staging
   DOTNET_VERSION: '9.0.x'                              # .NET 9 SDK version range
 
 jobs:
