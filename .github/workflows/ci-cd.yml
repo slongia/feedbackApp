@@ -55,7 +55,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{env.AZURE_WEBAPP_NAME}}
-          slot-name: ${{AZURE_WEBAPP_SLOT}}
+          slot-name: ${{env.AZURE_WEBAPP_SLOT}}
           publish-profile: ${{secrets.AZURE_FEEDBACKAPP_PUBLISH_PROFILE_STAGING}}
           package: ./publish
 

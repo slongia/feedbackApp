@@ -2,6 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddControllers();
 builder.Services.AddScoped<ICalculatorService, CalculatorService>();
 var app = builder.Build();
 
@@ -22,5 +23,9 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+app.MapControllers();
 
 app.Run();
+
+//it gives WebApplicationFactory<Program> a concrete Program type to locate the entry point.
+public partial class Program { }
