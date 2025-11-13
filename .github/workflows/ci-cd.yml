@@ -2,12 +2,13 @@ name: Build, Test, and Deploy ASP.NET Core WebApp to Azure
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main","dev" ]
 
 env:
   AZURE_WEBAPP_NAME: feedback   # <-- change to your App Service name
+  AZURE_WEBAPP_SLOT: feedback-staging
   DOTNET_VERSION: '9.0.x'                              # .NET 9 SDK version range
 
 jobs:
@@ -32,7 +33,35 @@ jobs:
       - name: Test
         run: dotnet test --configuration Release --no-build --no-restore
 
-  publish_and_deploy:
+  deploy_staging:    
+    #run when pushing to dev branch
+    if: github.ref == 'refs/heads/dev'
+    needs: build_and_test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish
+        run: dotnet publish src/feedbackApp/feedbackApp.csproj -c Release -o ./publish
+
+      - name: Deploy to Azure Web App (staging slot)
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{env.AZURE_WEBAPP_NAME}}
+          slot-name: ${{AZURE_WEBAPP_SLOT}}
+          publish-profile: ${{secrets.AZURE_FEEDBACKAPP_PUBLISH_PROFILE_STAGING}}
+          package: ./publish
+
+  
+  deploy_production:
+    if: github.ref == 'refs/heads/main'
     needs: build_and_test         # This enforces: deploy only if build+tests succeed
     runs-on: ubuntu-latest
 
@@ -48,9 +77,9 @@ jobs:
       - name: Publish
         run: dotnet publish src/feedbackApp/feedbackApp.csproj -c Release -o ./publish
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App(production)
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_FEEDBACKAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_FEEDBACKAPP_PUBLISH_PROFILE_PROD }}
           package: ./publish
