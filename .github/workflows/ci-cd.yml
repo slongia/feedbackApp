@@ -33,10 +33,78 @@ jobs:
       - name: Test
         run: dotnet test --configuration Release --no-build --no-restore
 
+  migrate_staging_db:
+    if: github.ref == 'refs/heads/dev'
+    needs: build_and_test
+    runs-on: ubuntu-latest
+
+    # Override DefaultConnection for EF tools
+    env:
+      ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_POSTGRES_CONNECTION_STAGING }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install dotnet-ef
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Add dotnet tools to PATH
+        shell: bash
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Apply EF Core migrations to STAGING database
+        run: |
+          dotnet ef database update \
+            --project src/feedbackApp/feedbackApp.csproj \
+            --startup-project src/feedbackApp/feedbackApp.csproj \
+            --configuration Release
+
+
+  migrate_prod_db:
+    if: github.ref == 'refs/heads/main'
+    needs: build_and_test
+    runs-on: ubuntu-latest
+
+    env:
+      ConnectionStrings__DefaultConnection: ${{ secrets.AZURE_POSTGRES_CONNECTION_PROD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install dotnet-ef
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Add dotnet tools to PATH
+        shell: bash
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Apply EF Core migrations to PROD database
+        run: |
+          dotnet ef database update \
+            --project src/feedbackApp/feedbackApp.csproj \
+            --startup-project src/feedbackApp/feedbackApp.csproj \
+            --configuration Release
+
+
+
+
   deploy_staging:    
     #run when pushing to dev branch
     if: github.ref == 'refs/heads/dev'
-    needs: build_and_test
+    #needs: build_and_test
+    needs: migrate_staging_db   # run only after DB migration succeeds
     runs-on: ubuntu-latest
     env:
       ASPNETCORE_ENVIRONMENT: Staging
@@ -64,7 +132,8 @@ jobs:
   
   deploy_production:
     if: github.ref == 'refs/heads/main'
-    needs: build_and_test         # This enforces: deploy only if build+tests succeed
+    #needs: build_and_test         # deploy only if build+tests succeed
+    needs: migrate_prod_db
     runs-on: ubuntu-latest
 
     steps:
