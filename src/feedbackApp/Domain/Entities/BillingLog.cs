@@ -1,3 +1,5 @@
+namespace feedbackApp.Domain.Entities;
+
 public class BillingLog
 {
     public int Id { get; set; }

@@ -1,3 +1,5 @@
+namespace feedbackApp.Domain.Entities;
+
 public class Discount
 {
     public int Id { get; set; }

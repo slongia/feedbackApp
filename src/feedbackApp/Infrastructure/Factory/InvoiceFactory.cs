@@ -1,4 +1,6 @@
 // Infrastructure/Factory/InvoiceFactory.cs
+using feedbackApp.Domain.Entities;
+using feedbackApp.Infrastructure.Data;
 public class InvoiceFactory : IInvoiceFactory
 {
     public Invoice CreateInvoice(int customerId, string type,

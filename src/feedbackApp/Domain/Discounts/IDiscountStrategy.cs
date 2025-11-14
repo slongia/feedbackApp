@@ -1,4 +1,6 @@
 // Domain/Discounts/IDiscountStrategy.cs
+using feedbackApp.Domain.Entities;
+using feedbackApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 public interface IDiscountStrategy
 {

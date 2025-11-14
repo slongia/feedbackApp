@@ -1,4 +1,5 @@
 // Domain/Repositories/IInvoiceRepository.cs
+using feedbackApp.Domain.Entities;
 public interface IInvoiceRepository
 {
     Task<Invoice?> GetByIdAsync(int id);

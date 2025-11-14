@@ -1,5 +1,8 @@
 // Infrastructure/Data/BillingDbContext.cs
 using Microsoft.EntityFrameworkCore;
+namespace feedbackApp.Infrastructure.Data;
+
+using feedbackApp.Domain.Entities;
 
 public class BillingDbContext : DbContext
 {

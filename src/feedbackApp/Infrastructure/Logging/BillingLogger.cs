@@ -1,4 +1,6 @@
 // Infrastructure/Logging/BillingLogger.cs
+using feedbackApp.Domain.Entities;
+using feedbackApp.Infrastructure.Data;
 public sealed class BillingLogger
 {
     private readonly BillingDbContext _dbContext;

@@ -1,3 +1,5 @@
+using feedbackApp.Infrastructure.Data;
+using feedbackApp.Domain.Entities;
 public class OnlineInvoiceGenerator : InvoiceGeneratorTemplate
 {
     private readonly IInvoiceCalculator _calculator;

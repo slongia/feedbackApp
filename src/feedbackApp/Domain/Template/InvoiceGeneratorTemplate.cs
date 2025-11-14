@@ -1,3 +1,5 @@
+using feedbackApp.Domain.Entities;
+using feedbackApp.Infrastructure.Data;
 public abstract class InvoiceGeneratorTemplate
 {
     protected readonly IBillingUnitOfWork Uow;

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using feedbackApp.Infrastructure.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

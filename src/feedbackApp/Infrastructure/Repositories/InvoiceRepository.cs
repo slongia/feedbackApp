@@ -1,4 +1,6 @@
 // Infrastructure/Repositories/InvoiceRepository.cs
+using feedbackApp.Domain.Entities;
+using feedbackApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 public class InvoiceRepository : IInvoiceRepository
 {

@@ -1,3 +1,5 @@
+using feedbackApp.Infrastructure.Data;
+using feedbackApp.Domain.Entities;
 public class LoggingInvoiceCalculatorDecorator : IInvoiceCalculator
 {
     private readonly IInvoiceCalculator _inner;

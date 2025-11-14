@@ -1,3 +1,5 @@
+using feedbackApp.Infrastructure.Data;
+using feedbackApp.Domain.Entities;
 public class BaseInvoiceCalculator : IInvoiceCalculator
 {
     private readonly BillingDbContext _db;

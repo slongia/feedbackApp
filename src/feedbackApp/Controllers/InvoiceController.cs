@@ -1,5 +1,7 @@
 // Web/Controllers/InvoiceController.cs
 using Microsoft.AspNetCore.Mvc;
+using feedbackApp.Domain.Entities;
+using feedbackApp.Infrastructure.Data;
 
 [ApiController]
 [Route("api/[controller]")]

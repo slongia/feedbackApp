@@ -1,4 +1,6 @@
 // Infrastructure/UnitOfWork/BillingUnitOfWork.cs
+using feedbackApp.Domain.Entities;
+using feedbackApp.Infrastructure.Data;
 public class BillingUnitOfWork : IBillingUnitOfWork
 {
     private readonly BillingDbContext _db;
