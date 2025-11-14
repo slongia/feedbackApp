@@ -38,6 +38,8 @@ jobs:
     if: github.ref == 'refs/heads/dev'
     needs: build_and_test
     runs-on: ubuntu-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: Staging
 
     steps:
       - name: Checkout
