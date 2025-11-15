@@ -51,19 +51,19 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Restore
+        run: dotnet restore src/feedbackApp/feedbackApp.csproj
+
       - name: Install dotnet-ef
-        run: dotnet tool install --global dotnet-ef
+        run: dotnet tool install --global dotnet-ef --version 9.0.0
 
       - name: Add dotnet tools to PATH
         shell: bash
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Apply EF Core migrations to STAGING database
-        run: |
-          dotnet ef database update \
-            --project src/feedbackApp/feedbackApp.csproj \
-            --startup-project src/feedbackApp/feedbackApp.csproj \
-            --configuration Release
+        working-directory: src/feedbackApp
+        run: dotnet ef database update --configuration Release
 
 
   migrate_prod_db:
@@ -82,22 +82,20 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore
+        run: dotnet restore src/feedbackApp/feedbackApp.csproj
 
       - name: Install dotnet-ef
-        run: dotnet tool install --global dotnet-ef
+        run: dotnet tool install --global dotnet-ef --version 9.0.0
 
       - name: Add dotnet tools to PATH
         shell: bash
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Apply EF Core migrations to PROD database
-        run: |
-          dotnet ef database update \
-            --project src/feedbackApp/feedbackApp.csproj \
-            --startup-project src/feedbackApp/feedbackApp.csproj \
-            --configuration Release
-
-
+        working-directory: src/feedbackApp
+        run: dotnet ef database update --configuration Release
 
 
   deploy_staging:    
